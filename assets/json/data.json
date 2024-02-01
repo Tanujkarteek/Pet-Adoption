@@ -1,0 +1,38 @@
+[
+  {
+    "name": "max",
+    "image": "assets/images/cat1.jpg",
+    "tags": [
+      "cat",
+      "young",
+      "energrtic"
+    ],
+    "age": 10,
+    "price": "100",
+    "adopted": false
+  },
+  {
+    "name": "garfield",
+    "image": "assets/images/cat2.jpg",
+    "tags": [
+      "cat",
+      "young",
+      "lazy"
+    ],
+    "age": 10,
+    "price": "100",
+    "adopted": false
+  },
+  {
+    "name": "stephen",
+    "image": "assets/images/cat3.jpg",
+    "tags": [
+      "cat",
+      "young",
+      "sleepy"
+    ],
+    "age": 10,
+    "price": "100",
+    "adopted": false
+  }
+]

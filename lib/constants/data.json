@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Max",
+    "image": "assets/images/cat1.jpg",
+    "tags": [
+      "cat",
+      "old"
+    ],
+    "age": 12,
+    "price": "100",
+    "gender": "Male",
+    "color": "Colors.orangeAccent"
+  },
+  {
+    "name": "Jasper",
+    "image": "assets/images/cat1.jpg",
+    "tags": [
+      "dog",
+      "young"
+    ],
+    "age": 5,
+    "price": "900",
+    "gender": "Male",
+    "color": "Colors.deepPurpleAccent"
+  }
+]

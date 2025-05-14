@@ -35,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   // Repository instance with default implementation if not provided
   late final PetRepositoryInterface _petRepository;
+  bool _isFilterActive = false;
 
   // Method to handle refresh action
   Future<void> _refreshData() async {
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _foundList = freshData;
       selectedColor = ColorRandomizer(_foundList);
       isLoading = false;
+      _isFilterActive = false;
     });
   }
 
@@ -107,6 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _clearFilters() {
+    setState(() {
+      _foundList = fetchedList;
+      _isFilterActive = false;
+    });
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -117,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return LoadingOverlayWidget(
       isLoading: isLoading,
       child: BlocListener(
@@ -157,7 +167,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Container(
                       height: !isLandscape
-                          ? MediaQuery.of(context).size.height * 0.06
+                          ? isIos
+                              ? MediaQuery.of(context).size.height * 0.06
+                              : MediaQuery.of(context).size.height * 0.05
                           : MediaQuery.of(context).size.height * 0.1,
                       decoration: BoxDecoration(
                         color: Theme.of(context)
@@ -223,8 +235,40 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Spacer(),
+                            // Show active filter indicator and clear button if filters are active
+                            if (_isFilterActive)
+                              GestureDetector(
+                                onTap: _clearFilters,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Text(
+                                    'Clear Filters',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 12,
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            SizedBox(width: 12),
                             GestureDetector(
                               onTap: () async {
+                                setState(() {
+                                  selectedCategory = 'All';
+                                });
                                 final updatedList = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -236,6 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if (updatedList != null) {
                                   setState(() {
                                     _foundList = updatedList;
+                                    _isFilterActive = true;
                                   });
                                 }
                               },
@@ -243,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'Filter',
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   fontFamily: 'WatchQuinn',
                                 ),
                               ),

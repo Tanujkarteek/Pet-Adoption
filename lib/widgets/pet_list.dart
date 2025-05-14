@@ -109,7 +109,6 @@ class _PetListState extends State<PetList> {
                         alignment: Alignment.center,
                         children: [
                           Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
@@ -132,8 +131,8 @@ class _PetListState extends State<PetList> {
                                         child: CircularProgressIndicator()),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
-                                    height: 100,
-                                    width: 100,
+                                    height: isIos ? 100 : 130,
+                                    width: isIos ? 100 : 130,
                                   ),
                                 ),
                               ),
@@ -201,23 +200,11 @@ class _PetListState extends State<PetList> {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .primary,
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         fontFamily: 'WatchQuinn',
                                       ),
                                     ),
                                     Spacer(),
-                                    // SizedBox(
-                                    //   child: !_myBox
-                                    //           .containsKey(widget.foundList[index].id)
-                                    //       ? Icon(
-                                    //           Icons.check,
-                                    //           color: Colors.green,
-                                    //         )
-                                    //       : Icon(
-                                    //           Icons.close,
-                                    //           color: Colors.red,
-                                    //         ),
-                                    // ),
                                     _myBox2.containsKey(
                                             widget.foundList[index].id)
                                         ? GestureDetector(
@@ -232,10 +219,7 @@ class _PetListState extends State<PetList> {
                                             },
                                             child: Icon(
                                               Icons.favorite,
-                                              size: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.06,
+                                              size: 26,
                                             ),
                                           )
                                         : GestureDetector(
@@ -250,10 +234,7 @@ class _PetListState extends State<PetList> {
                                             },
                                             child: Icon(
                                               Icons.favorite_border_outlined,
-                                              size: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.06,
+                                              size: 26,
                                             ),
                                           ),
                                   ],

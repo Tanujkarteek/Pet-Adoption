@@ -39,17 +39,16 @@ class _PetDetailState extends State<PetDetail> {
   final _myBox = Hive.box('pets');
 
   void _showPopUp(BuildContext context, int index) {
-    //create a toast
-    final scaffold = ScaffoldMessenger.of(context);
     QuickAlert.show(
-        confirmBtnColor: Colors.black,
-        context: context,
-        type: QuickAlertType.success,
-        text: 'You have Adopted ${widget.foundList[index].name}',
-        onConfirmBtnTap: () {
-          context.read<AdoptedBloc>().add(AdoptionExit());
-          Navigator.pop(context);
-        });
+      confirmBtnColor: Colors.black,
+      context: context,
+      type: QuickAlertType.success,
+      text: 'You have Adopted ${widget.foundList[index].name}',
+      onConfirmBtnTap: () {
+        context.read<AdoptedBloc>().add(AdoptionExit());
+        Navigator.pop(context);
+      },
+    );
   }
 
   @override
@@ -93,10 +92,10 @@ class _PetDetailState extends State<PetDetail> {
           alignment: Alignment.bottomCenter,
           children: [
             Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.surface,
               body: SingleChildScrollView(
                 physics: NeverScrollableScrollPhysics(),
                 child: Stack(
-                  // alignment: Alignment.bottomCenter,
                   children: [
                     SizedBox(
                       child: !isLandscape

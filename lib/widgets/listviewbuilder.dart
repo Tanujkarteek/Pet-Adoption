@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../constants/data.dart';
 
 class ListViewBuilder extends StatefulWidget {
@@ -32,12 +32,16 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
                 ? EdgeInsets.symmetric(vertical: 10, horizontal: 10)
                 : EdgeInsets.symmetric(vertical: 10),
             child: SizedBox(
-              height: isLandscape
-                  ? MediaQuery.of(context).size.height * 0.2
-                  : MediaQuery.of(context).size.height * 0.1,
+              height: kIsWeb
+                  ? MediaQuery.of(context).size.height * 0.1
+                  : isLandscape
+                      ? MediaQuery.of(context).size.height * 0.2
+                      : MediaQuery.of(context).size.height * 0.1,
               child: Row(
                 children: [
                   Container(
+                    height: kIsWeb ? 150 : 100,
+                    width: kIsWeb ? 150 : 100,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: widget.selectedColor[index],
@@ -50,15 +54,17 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
                           width: 10,
                           child: CircularProgressIndicator()),
                       errorWidget: (context, url, error) => Icon(Icons.error),
-                      height: 100,
-                      width: 100,
+                      height: kIsWeb ? 150 : 100,
+                      width: kIsWeb ? 150 : 100,
                     ),
                   ),
                   Spacer(),
                   SizedBox(
-                    height: isLandscape
-                        ? MediaQuery.of(context).size.height * 0.12
-                        : MediaQuery.of(context).size.height * 0.07,
+                    height: kIsWeb
+                        ? MediaQuery.of(context).size.height * 0.08
+                        : isLandscape
+                            ? MediaQuery.of(context).size.height * 0.12
+                            : MediaQuery.of(context).size.height * 0.07,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -66,7 +72,7 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
                           widget.adoptedList[index].name,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
-                            fontSize: 20,
+                            fontSize: kIsWeb ? 30 : 20,
                             fontFamily: 'WatchQuinn',
                           ),
                         ),
@@ -75,7 +81,7 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
                           "\$ ${widget.adoptedList[index].price}",
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
-                            fontSize: 16,
+                            fontSize: kIsWeb ? 30 : 16,
                             fontFamily: 'WatchQuinn',
                           ),
                         ),
@@ -95,7 +101,7 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
                           softWrap: true,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
-                            fontSize: 10,
+                            fontSize: kIsWeb ? 20 : 10,
                             fontFamily: 'AlbertSans',
                           ),
                         ),
@@ -107,7 +113,7 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
                           softWrap: true,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
-                            fontSize: 10,
+                            fontSize: kIsWeb ? 20 : 10,
                             fontFamily: 'AlbertSans',
                           ),
                         ),

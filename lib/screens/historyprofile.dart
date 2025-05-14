@@ -1,16 +1,10 @@
-import 'dart:math';
-
 import 'package:adoption/bloc/adopted/adopted_bloc.dart';
 import 'package:adoption/widgets/colorrandomizer.dart';
 import 'package:adoption/widgets/listviewbuilder.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_ce/hive.dart';
-
-import '../constants/colors.dart';
 import '../constants/data.dart';
-import 'homescreen.dart';
 
 class HistoryPage extends StatefulWidget {
   final List<DataModel> ownedList;

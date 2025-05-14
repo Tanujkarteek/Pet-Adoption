@@ -11,7 +11,6 @@ import 'package:quickalert/quickalert.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../bloc/adopted/adopted_bloc.dart';
 import '../widgets/herophotoview.dart';
-import 'homescreen.dart';
 
 class PetDetail extends StatefulWidget {
   final int index;

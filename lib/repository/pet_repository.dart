@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/data.dart';
@@ -13,54 +14,87 @@ class PetRepository implements PetRepositoryInterface {
   // Fetch pets with cache strategy
   Future<List<DataModel>> fetchPets() async {
     try {
-      // Try to get data from cache first
+      // Always try to get cached data first
       final cachedData = await _getCachedData();
+
+      // If we have valid non-expired cache, use it
       if (cachedData != null) {
-        print('Using cached data');
+        print('Using valid cached data');
         return cachedData;
       }
 
-      // If no cache or expired, fetch from network
-      return await _fetchFromNetwork();
+      // If no valid cache, try to get expired cache as backup
+      final expiredCache = await _getCachedData(ignoreExpiration: true);
+
+      // Try network request
+      try {
+        print('Attempting network request');
+        final networkData = await _fetchFromNetwork();
+        return networkData;
+      } catch (networkError) {
+        print('Network request failed: $networkError');
+
+        // If network fails but we have expired cache, use it
+        if (expiredCache != null) {
+          print('Using expired cached data due to network error');
+          return expiredCache;
+        }
+
+        // If no cache at all, use fallback data
+        print('Using fallback data as last resort');
+        return _getFallbackData();
+      }
     } catch (e) {
       print('Exception during data fetch: $e');
-      // Try to use cache even if it's expired in case of network failure
-      final cachedData = await _getCachedData(ignoreExpiration: true);
-      if (cachedData != null) {
-        print('Using expired cached data due to network error');
-        return cachedData;
-      }
-      // If all fails, return empty list
-      return [];
+      return _getFallbackData();
     }
   }
 
   // Refresh data (force network fetch)
   Future<List<DataModel>> refreshPets() async {
     try {
-      await _clearCache();
-      return await _fetchFromNetwork();
+      final networkData = await _fetchFromNetwork();
+      return networkData;
     } catch (e) {
       print('Error refreshing data: $e');
-      return [];
+      // Try to get any cached data when refresh fails
+      final cachedData = await _getCachedData(ignoreExpiration: true);
+      if (cachedData != null) {
+        return cachedData;
+      }
+      return _getFallbackData();
     }
   }
 
   // Private method to fetch from network
   Future<List<DataModel>> _fetchFromNetwork() async {
-    final response = await http.get(Uri.parse(_apiUrl));
-    if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      List<DataModel> fetchedList = [];
-      for (var item in data) {
-        fetchedList.add(DataModel.fromJson(item));
-      }
+    try {
+      print('Attempting to fetch data from: $_apiUrl');
+      final response = await http.get(Uri.parse(_apiUrl));
 
-      // Cache the fetched data
-      await _cacheData(fetchedList, response.body);
-      return fetchedList;
-    } else {
-      throw Exception('Failed to load pets: ${response.statusCode}');
+      print('Response status code: ${response.statusCode}');
+      print('Response headers: ${response.headers}');
+
+      if (response.statusCode == 200) {
+        print(
+            'Response body: ${response.body.substring(0, min(200, response.body.length))}...');
+        var data = json.decode(response.body);
+        List<DataModel> fetchedList = [];
+        for (var item in data) {
+          fetchedList.add(DataModel.fromJson(item));
+        }
+
+        // Cache the fetched data
+        await _cacheData(fetchedList, response.body);
+        return fetchedList;
+      } else {
+        throw Exception(
+            'Failed to load pets: Status ${response.statusCode}, Body: ${response.body}');
+      }
+    } catch (e, stackTrace) {
+      print('Detailed network error: $e');
+      print('Stack trace: $stackTrace');
+      throw Exception('Network request failed: $e');
     }
   }
 
@@ -120,5 +154,11 @@ class PetRepository implements PetRepositoryInterface {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_cacheKey);
     await prefs.remove(_cacheTimestampKey);
+  }
+
+  List<DataModel> _getFallbackData() {
+    // Implementation of _getFallbackData method
+    // This is a placeholder and should be replaced with the actual implementation
+    return [];
   }
 }

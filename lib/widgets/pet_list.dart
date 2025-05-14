@@ -69,8 +69,8 @@ class _PetListState extends State<PetList> {
                 childAspectRatio: kIsWeb
                     ? 1.8
                     : !isLandscape
-                        ? 0.88
-                        : 0.75,
+                        ? 0.8
+                        : 1.3,
               ),
               itemCount: widget.foundList.length,
               itemBuilder: (context, index) {
@@ -129,8 +129,8 @@ class _PetListState extends State<PetList> {
                                         child: CircularProgressIndicator()),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
-                                    height: isIos ? 100 : 130,
-                                    width: isIos ? 100 : 130,
+                                    height: kIsWeb ? 130 : 100,
+                                    width: kIsWeb ? 130 : 100,
                                   ),
                                 ),
                               ),

@@ -1,0 +1,2 @@
+/Users/tanuj/Desktop/posha/Pet-Adoption/android/app/.cxx/RelWithDebInfo/15673u12/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/tanuj/Desktop/posha/Pet-Adoption/android/app/.cxx/RelWithDebInfo/15673u12/arm64-v8a/CMakeFiles/rebuild_cache.dir

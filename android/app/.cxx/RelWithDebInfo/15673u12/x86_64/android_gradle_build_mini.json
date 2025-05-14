@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/tanuj/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/tanuj/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/tanuj/Desktop/posha/Pet-Adoption/android/app/.cxx/RelWithDebInfo/15673u12/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/tanuj/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/tanuj/Desktop/posha/Pet-Adoption/android/app/.cxx/RelWithDebInfo/15673u12/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

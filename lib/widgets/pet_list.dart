@@ -71,7 +71,7 @@ class _PetListState extends State<PetList> {
                         ? 1.8
                         : isIos
                             ? 0.88
-                            : 0.8
+                            : 0.75
                     : 1.34,
               ),
               itemCount: widget.foundList.length,

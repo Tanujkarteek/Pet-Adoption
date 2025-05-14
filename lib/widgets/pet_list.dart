@@ -31,6 +31,7 @@ class _PetListState extends State<PetList> {
   Widget build(BuildContext context) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return BlocConsumer<AdoptedBloc, AdoptedState>(
       bloc: context.read<AdoptedBloc>(),
       listener: (context, state) {
@@ -68,7 +69,9 @@ class _PetListState extends State<PetList> {
                 childAspectRatio: !isLandscape
                     ? kIsWeb
                         ? 1.8
-                        : 0.88
+                        : isIos
+                            ? 0.88
+                            : 0.8
                     : 1.34,
               ),
               itemCount: widget.foundList.length,
@@ -106,6 +109,8 @@ class _PetListState extends State<PetList> {
                         alignment: Alignment.center,
                         children: [
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
                                 height:
@@ -146,7 +151,7 @@ class _PetListState extends State<PetList> {
                                       : MediaQuery.of(context).size.width *
                                           0.02,
                                 ),
-                                width: MediaQuery.of(context).size.width * 0.3,
+                                width: MediaQuery.of(context).size.width * 0.32,
                                 child: Row(
                                   children: [
                                     Text(
@@ -161,7 +166,7 @@ class _PetListState extends State<PetList> {
                                     ),
                                     Spacer(),
                                     Text(
-                                      "\$ ${widget.foundList[index].price}",
+                                      "\$${widget.foundList[index].price}",
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -175,7 +180,7 @@ class _PetListState extends State<PetList> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Container(
                                 padding: EdgeInsets.symmetric(
@@ -187,7 +192,7 @@ class _PetListState extends State<PetList> {
                                       : MediaQuery.of(context).size.width *
                                           0.02,
                                 ),
-                                width: MediaQuery.of(context).size.width * 0.3,
+                                width: MediaQuery.of(context).size.width * 0.32,
                                 child: Row(
                                   children: [
                                     Text(
@@ -196,7 +201,7 @@ class _PetListState extends State<PetList> {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .primary,
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         fontFamily: 'WatchQuinn',
                                       ),
                                     ),
@@ -215,8 +220,8 @@ class _PetListState extends State<PetList> {
                                     // ),
                                     _myBox2.containsKey(
                                             widget.foundList[index].id)
-                                        ? IconButton(
-                                            onPressed: () {
+                                        ? GestureDetector(
+                                            onTap: () {
                                               context.read<FavoriteBloc>().add(
                                                     RemoveFavorite(
                                                       petId: widget
@@ -225,10 +230,16 @@ class _PetListState extends State<PetList> {
                                                     ),
                                                   );
                                             },
-                                            icon: Icon(Icons.favorite),
+                                            child: Icon(
+                                              Icons.favorite,
+                                              size: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.06,
+                                            ),
                                           )
-                                        : IconButton(
-                                            onPressed: () {
+                                        : GestureDetector(
+                                            onTap: () {
                                               context.read<FavoriteBloc>().add(
                                                     AddFavorite(
                                                       petId: widget
@@ -237,8 +248,12 @@ class _PetListState extends State<PetList> {
                                                     ),
                                                   );
                                             },
-                                            icon: Icon(
+                                            child: Icon(
                                               Icons.favorite_border_outlined,
+                                              size: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.06,
                                             ),
                                           ),
                                   ],

@@ -1,0 +1,2 @@
+/Users/tanuj/Desktop/posha/Pet-Adoption/android/app/.cxx/Debug/33163230/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/tanuj/Desktop/posha/Pet-Adoption/android/app/.cxx/Debug/33163230/armeabi-v7a/CMakeFiles/rebuild_cache.dir

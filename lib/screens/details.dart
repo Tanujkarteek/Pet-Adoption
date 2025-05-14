@@ -64,6 +64,8 @@ class _PetDetailState extends State<PetDetail> {
     int index = widget.index;
     Color color = widget.color;
     List<DataModel> dataList = widget.foundList;
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     // final AdoptedBloc adoptionBloc = AdoptedBloc();
     return BlocConsumer<AdoptedBloc, AdoptedState>(
@@ -97,171 +99,92 @@ class _PetDetailState extends State<PetDetail> {
                   // alignment: Alignment.bottomCenter,
                   children: [
                     SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Stack(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              HeroPhotoViewRouteWrapper(
-                                            imageProvider:
-                                                CachedNetworkImageProvider(
-                                                    dataList[index].image),
-                                            index: index,
-                                            backgroundDecoration: BoxDecoration(
-                                              color: color,
+                      child: !isLandscape
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HeroPhotoViewRouteWrapper(
+                                                  imageProvider:
+                                                      CachedNetworkImageProvider(
+                                                          dataList[index]
+                                                              .image),
+                                                  index: index,
+                                                  backgroundDecoration:
+                                                      BoxDecoration(
+                                                    color: color,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Hero(
+                                            tag: !widget.isFavorite
+                                                ? index
+                                                : "${index}fav",
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(150),
+                                                  bottomRight:
+                                                      Radius.circular(150),
+                                                ),
+                                                color: color,
+                                              ),
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.55,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: CachedNetworkImage(
+                                                imageUrl: dataList[index].image,
+                                                placeholder: (context, url) =>
+                                                    SizedBox(
+                                                        height: 10,
+                                                        width: 10,
+                                                        child:
+                                                            CircularProgressIndicator()),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                    child: Hero(
-                                      tag: !widget.isFavorite
-                                          ? index
-                                          : "${index}fav",
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(150),
-                                            bottomRight: Radius.circular(150),
-                                          ),
-                                          color: color,
-                                        ),
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.55,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: CachedNetworkImage(
-                                          imageUrl: dataList[index].image,
-                                          placeholder: (context, url) => SizedBox(
-                                              height: 10,
-                                              width: 10,
-                                              child:
-                                                  CircularProgressIndicator()),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        top:
-                                            MediaQuery.of(context).size.height *
-                                                0.08,
-                                        left:
-                                            MediaQuery.of(context).size.height *
-                                                0.02),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .surface
-                                              .withValues(alpha: 0.5),
-                                          spreadRadius: 1,
-                                          blurRadius: 5,
-                                          offset: Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: IconButton(
-                                      onPressed: () {
-                                        context
-                                            .read<AdoptedBloc>()
-                                            .add(AdoptionExit());
-                                        //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen()), (route) => false);
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_back,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.02,
-                          ),
-                          SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.85,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        dataList[index].name,
-                                        style: TextStyle(
-                                          fontSize: 40,
-                                          fontFamily: "WatchQuinn",
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        "\$ ${dataList[index].price}",
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                          fontFamily: "WatchQuinn",
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.005,
-                                ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.85,
-                                  child: Row(
-                                    //mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      for (int i = 0;
-                                          i < dataList[index].tags.length;
-                                          i++)
                                         Container(
-                                          margin: EdgeInsets.only(right: 10),
-                                          padding: EdgeInsets.only(
-                                              left: 5, right: 5),
+                                          margin: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.08,
+                                              left: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.02),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .primary
-                                                .withValues(alpha: 0.8),
+                                                .surface,
                                             boxShadow: [
                                               BoxShadow(
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .primary
+                                                    .surface
                                                     .withValues(alpha: 0.5),
                                                 spreadRadius: 1,
                                                 blurRadius: 5,
@@ -269,77 +192,362 @@ class _PetDetailState extends State<PetDetail> {
                                               ),
                                             ],
                                           ),
-                                          child: Text(
-                                            dataList[index].tags[i],
-                                            style: TextStyle(
+                                          child: IconButton(
+                                            onPressed: () {
+                                              context
+                                                  .read<AdoptedBloc>()
+                                                  .add(AdoptionExit());
+                                              //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen()), (route) => false);
+                                            },
+                                            icon: Icon(
+                                              Icons.arrow_back,
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .onPrimary,
-                                              fontSize: 15,
-                                              fontFamily: "WatchQuinn",
+                                                  .primary,
                                             ),
                                           ),
-                                        ),
-                                    ],
-                                  ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.02,
                                 ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.85,
-                                  child: Row(
+                                SingleChildScrollView(
+                                  child: Column(
                                     children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: color,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary
-                                                  .withValues(alpha: 0.5),
-                                              spreadRadius: 1,
-                                              blurRadius: 5,
-                                              offset: Offset(0, 3),
-                                            ),
-                                          ],
-                                        ),
+                                      SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.4,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.08,
-                                        child: Text(
-                                          "${dataList[index].age} Months\nAge",
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            fontSize: 18,
-                                            fontFamily: "WatchQuinn",
-                                          ),
-                                          textAlign: TextAlign.center,
+                                                0.85,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              dataList[index].name,
+                                              style: TextStyle(
+                                                fontSize: 40,
+                                                fontFamily: "WatchQuinn",
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Text(
+                                              "\$ ${dataList[index].price}",
+                                              style: TextStyle(
+                                                fontSize: 24,
+                                                fontFamily: "WatchQuinn",
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Spacer(),
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.005,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.85,
+                                        child: Row(
+                                          //mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            for (int i = 0;
+                                                i < dataList[index].tags.length;
+                                                i++)
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(right: 10),
+                                                padding: EdgeInsets.only(
+                                                    left: 5, right: 5),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                      .withValues(alpha: 0.8),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary
+                                                          .withValues(
+                                                              alpha: 0.5),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 5,
+                                                      offset: Offset(0, 3),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Text(
+                                                  dataList[index].tags[i],
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onPrimary,
+                                                    fontSize: 15,
+                                                    fontFamily: "WatchQuinn",
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.85,
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: color,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary
+                                                        .withValues(alpha: 0.5),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 5,
+                                                    offset: Offset(0, 3),
+                                                  ),
+                                                ],
+                                              ),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.08,
+                                              child: Text(
+                                                "${dataList[index].age} Months\nAge",
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  fontSize: 18,
+                                                  fontFamily: "WatchQuinn",
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: color,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary
+                                                        .withValues(alpha: 0.5),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 5,
+                                                    offset: Offset(0, 3),
+                                                  ),
+                                                ],
+                                              ),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.08,
+                                              child: Text(
+                                                "${dataList[index].gender} \nGender",
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  fontSize: 18,
+                                                  fontFamily: "WatchQuinn",
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.85,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.12,
+                                        child: Text(
+                                          lorem(paragraphs: 1, words: 5),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontSize: 18,
+                                            fontFamily: "AlbertSans",
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.85,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.06,
+                                        child: ElevatedButton(
+                                          onPressed: _myBox.containsKey(
+                                                  dataList[index].id)
+                                              ? null
+                                              : () => context
+                                                  .read<AdoptedBloc>()
+                                                  .add(AdoptionRequested(
+                                                      petId:
+                                                          dataList[index].id)),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: color.withValues(
+                                                alpha: _myBox.containsKey(
+                                                        dataList[index].id)
+                                                    ? 0.1
+                                                    : 0.8),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Adopt",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "WatchQuinn",
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Stack(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HeroPhotoViewRouteWrapper(
+                                                imageProvider:
+                                                    CachedNetworkImageProvider(
+                                                        dataList[index].image),
+                                                index: index,
+                                                backgroundDecoration:
+                                                    BoxDecoration(
+                                                  color: color,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Hero(
+                                          tag: !widget.isFavorite
+                                              ? index
+                                              : "${index}fav",
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                bottomLeft: !isLandscape
+                                                    ? Radius.circular(150)
+                                                    : Radius.circular(0),
+                                                bottomRight: !isLandscape
+                                                    ? Radius.circular(150)
+                                                    : Radius.circular(40),
+                                                topRight: isLandscape
+                                                    ? Radius.circular(40)
+                                                    : Radius.circular(0),
+                                              ),
+                                              color: color,
+                                            ),
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: CachedNetworkImage(
+                                              imageUrl: dataList[index].image,
+                                              placeholder: (context, url) =>
+                                                  SizedBox(
+                                                      height: 10,
+                                                      width: 10,
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                       Container(
-                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.only(
+                                            top: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.08,
+                                            left: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.02),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          color: color,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
                                           boxShadow: [
                                             BoxShadow(
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .secondary
+                                                  .surface
                                                   .withValues(alpha: 0.5),
                                               spreadRadius: 1,
                                               blurRadius: 5,
@@ -347,86 +555,308 @@ class _PetDetailState extends State<PetDetail> {
                                             ),
                                           ],
                                         ),
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.08,
-                                        child: Text(
-                                          "${dataList[index].gender} \nGender",
-                                          style: TextStyle(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            context
+                                                .read<AdoptedBloc>()
+                                                .add(AdoptionExit());
+                                            //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen()), (route) => false);
+                                          },
+                                          icon: Icon(
+                                            Icons.arrow_back,
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
-                                            fontSize: 18,
-                                            fontFamily: "WatchQuinn",
                                           ),
-                                          textAlign: TextAlign.center,
                                         ),
                                       )
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.02,
-                                ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.85,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.12,
-                                  child: Text(
-                                    lorem(paragraphs: 1, words: 5),
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 18,
-                                      fontFamily: "AlbertSans",
+                                Expanded(
+                                  flex: 1,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            left: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.02,
+                                            right: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                dataList[index].name,
+                                                style: TextStyle(
+                                                  fontSize: 40,
+                                                  fontFamily: "WatchQuinn",
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Text(
+                                                "\$ ${dataList[index].price}",
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontFamily: "WatchQuinn",
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.005,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            left: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.02,
+                                            right: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
+                                          ),
+                                          child: Row(
+                                            //mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              for (int i = 0;
+                                                  i <
+                                                      dataList[index]
+                                                          .tags
+                                                          .length;
+                                                  i++)
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 10),
+                                                  padding: EdgeInsets.only(
+                                                      left: 5, right: 5),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
+                                                        .withValues(alpha: 0.8),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary
+                                                            .withValues(
+                                                                alpha: 0.5),
+                                                        spreadRadius: 1,
+                                                        blurRadius: 5,
+                                                        offset: Offset(0, 3),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Text(
+                                                    dataList[index].tags[i],
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                      fontSize: 15,
+                                                      fontFamily: "WatchQuinn",
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.1,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.02,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: color,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary
+                                                          .withValues(
+                                                              alpha: 0.5),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 5,
+                                                      offset: Offset(0, 3),
+                                                    ),
+                                                  ],
+                                                ),
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.2,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.12,
+                                                child: Text(
+                                                  "${dataList[index].age} Months\nAge",
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    fontSize: 18,
+                                                    fontFamily: "WatchQuinn",
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: color,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary
+                                                          .withValues(
+                                                              alpha: 0.5),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 5,
+                                                      offset: Offset(0, 3),
+                                                    ),
+                                                  ],
+                                                ),
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.2,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.12,
+                                                child: Text(
+                                                  "${dataList[index].gender} \nGender",
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    fontSize: 18,
+                                                    fontFamily: "WatchQuinn",
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.1,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.02,
+                                          ),
+                                          child: Text(
+                                            lorem(paragraphs: 1, words: 5),
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              fontSize: 18,
+                                              fontFamily: "AlbertSans",
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.1,
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.46,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.12,
+                                          child: ElevatedButton(
+                                            onPressed: _myBox.containsKey(
+                                                    dataList[index].id)
+                                                ? null
+                                                : () => context
+                                                    .read<AdoptedBloc>()
+                                                    .add(AdoptionRequested(
+                                                        petId: dataList[index]
+                                                            .id)),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: color.withValues(
+                                                  alpha: _myBox.containsKey(
+                                                          dataList[index].id)
+                                                      ? 0.1
+                                                      : 0.8),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              "Adopt",
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: "WatchQuinn",
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.85,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  child: ElevatedButton(
-                                    onPressed:
-                                        _myBox.containsKey(dataList[index].id)
-                                            ? null
-                                            : () => context
-                                                .read<AdoptedBloc>()
-                                                .add(AdoptionRequested(
-                                                    petId: dataList[index].id)),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: color.withValues(
-                                          alpha: _myBox.containsKey(
-                                                  dataList[index].id)
-                                              ? 0.1
-                                              : 0.8),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "Adopt",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontFamily: "WatchQuinn",
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ),
-                                )
                               ],
                             ),
-                          )
-                        ],
-                      ),
                     ),
                   ],
                 ),

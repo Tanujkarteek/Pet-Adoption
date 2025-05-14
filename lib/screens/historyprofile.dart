@@ -61,7 +61,7 @@ class _HistoryPageState extends State<HistoryPage> {
         onPressed: () {
           setState(() {
             _myBox.clear();
-            context.read<AdoptedBloc>().add(AdoptionExit());
+            context.read<AdoptedBloc>().add(AdoptionCleared());
             Navigator.pop(context);
           });
         },
@@ -73,12 +73,14 @@ class _HistoryPageState extends State<HistoryPage> {
       body: SafeArea(
         child: Column(
           children: [
-            _headerBar(),
+            HeaderBar(),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
             ListViewBuilder(
-                selectedColor: selectedColor, adoptedList: adoptedList)
+              selectedColor: selectedColor,
+              adoptedList: adoptedList,
+            )
           ],
         ),
       ),
@@ -86,8 +88,8 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 }
 
-class _headerBar extends StatelessWidget {
-  const _headerBar({super.key});
+class HeaderBar extends StatelessWidget {
+  const HeaderBar({super.key});
 
   @override
   Widget build(BuildContext context) {

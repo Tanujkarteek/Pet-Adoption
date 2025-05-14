@@ -26,5 +26,8 @@ class AdoptedBloc extends Bloc<AdoptedEvent, AdoptedState> {
     on<AdoptionExit>((event, emit) {
       emit(AdoptionExited());
     });
+    on<AdoptionCleared>((event, emit) {
+      emit(AdoptionClearedState());
+    });
   }
 }

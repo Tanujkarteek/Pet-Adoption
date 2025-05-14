@@ -16,18 +16,25 @@ class ListViewBuilder extends StatefulWidget {
 class _ListViewBuilderState extends State<ListViewBuilder> {
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return Expanded(
       child: ListView.builder(
         itemCount: widget.adoptedList.length,
         itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
           child: Card(
             color:
                 Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
             elevation: 5,
-            margin: EdgeInsets.symmetric(vertical: 10),
+            margin: isLandscape
+                ? EdgeInsets.symmetric(vertical: 10, horizontal: 10)
+                : EdgeInsets.symmetric(vertical: 10),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
+              height: isLandscape
+                  ? MediaQuery.of(context).size.height * 0.2
+                  : MediaQuery.of(context).size.height * 0.1,
               child: Row(
                 children: [
                   Container(
@@ -49,7 +56,9 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
                   ),
                   Spacer(),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.07,
+                    height: isLandscape
+                        ? MediaQuery.of(context).size.height * 0.12
+                        : MediaQuery.of(context).size.height * 0.07,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

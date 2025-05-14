@@ -14,4 +14,7 @@ class AdoptionFailure extends AdoptedState {
 
   AdoptionFailure({required this.error});
 }
+
 class AdoptionExited extends AdoptedState {}
+
+class AdoptionClearedState extends AdoptedState {}

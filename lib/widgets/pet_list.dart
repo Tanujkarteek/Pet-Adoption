@@ -29,6 +29,8 @@ class _PetListState extends State<PetList> {
   final _myBox2 = Hive.box('favorites');
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return BlocConsumer<AdoptedBloc, AdoptedState>(
       bloc: context.read<AdoptedBloc>(),
       listener: (context, state) {
@@ -54,225 +56,226 @@ class _PetListState extends State<PetList> {
             }
           },
           builder: (context, state) {
-            return Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: kIsWeb ? 4 : 2,
-                  childAspectRatio: kIsWeb ? 1.8 : 0.88,
-                ),
-                itemCount: widget.foundList.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PetDetail(
-                            index: index,
-                            color: widget.selectedColor[index],
-                            foundList: widget.foundList,
-                            isFavorite: widget.isFavorite,
-                          ),
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: !isLandscape
+                    ? kIsWeb
+                        ? 4
+                        : 2
+                    : 3,
+                childAspectRatio: !isLandscape
+                    ? kIsWeb
+                        ? 1.8
+                        : 0.88
+                    : 1.34,
+              ),
+              itemCount: widget.foundList.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PetDetail(
+                          index: index,
+                          color: widget.selectedColor[index],
+                          foundList: widget.foundList,
+                          isFavorite: widget.isFavorite,
                         ),
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.04,
-                        vertical: MediaQuery.of(context).size.height * 0.01,
                       ),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .secondary
-                              .withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.02,
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.04,
+                      vertical: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Hero(
+                                tag: !widget.isFavorite ? index : "${index}fav",
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: widget.selectedColor[index],
+                                  ),
+                                  //child: Image.asset(_foundList[index].image, height: 100, width: 100,)
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget.foundList[index].image,
+                                    placeholder: (context, url) => SizedBox(
+                                        height: 10,
+                                        width: 10,
+                                        child: CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                    height: 100,
+                                    width: 100,
+                                  ),
                                 ),
-                                Hero(
-                                  tag: !widget.isFavorite
-                                      ? index
-                                      : "${index}fav",
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: widget.selectedColor[index],
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: !isLandscape
+                                      ? kIsWeb
+                                          ? MediaQuery.of(context).size.width *
+                                              0.02
+                                          : 0
+                                      : MediaQuery.of(context).size.width *
+                                          0.02,
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.foundList[index].name,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontSize: 16,
+                                        fontFamily: 'WatchQuinn',
+                                      ),
                                     ),
-                                    //child: Image.asset(_foundList[index].image, height: 100, width: 100,)
-                                    child: CachedNetworkImage(
-                                      imageUrl: widget.foundList[index].image,
-                                      placeholder: (context, url) => SizedBox(
-                                          height: 10,
-                                          width: 10,
-                                          child: CircularProgressIndicator()),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
-                                      height: 100,
-                                      width: 100,
+                                    Spacer(),
+                                    Text(
+                                      "\$ ${widget.foundList[index].price}",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontSize: 14,
+                                        fontFamily: 'WatchQuinn',
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.005,
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: !isLandscape
+                                      ? kIsWeb
+                                          ? MediaQuery.of(context).size.width *
+                                              0.02
+                                          : 0
+                                      : MediaQuery.of(context).size.width *
+                                          0.02,
                                 ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: kIsWeb
-                                        ? MediaQuery.of(context).size.width *
-                                            0.02
-                                        : 0,
-                                  ),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.3,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        widget.foundList[index].name,
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontSize: 16,
-                                          fontFamily: 'WatchQuinn',
-                                        ),
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "${widget.foundList[index].age} month old",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontSize: 12,
+                                        fontFamily: 'WatchQuinn',
                                       ),
-                                      Spacer(),
-                                      Text(
-                                        "\$ ${widget.foundList[index].price}",
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontSize: 14,
-                                          fontFamily: 'WatchQuinn',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.005,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: kIsWeb
-                                        ? MediaQuery.of(context).size.width *
-                                            0.02
-                                        : 0,
-                                  ),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.3,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "${widget.foundList[index].age} month old",
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontSize: 12,
-                                          fontFamily: 'WatchQuinn',
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      // SizedBox(
-                                      //   child: !_myBox
-                                      //           .containsKey(widget.foundList[index].id)
-                                      //       ? Icon(
-                                      //           Icons.check,
-                                      //           color: Colors.green,
-                                      //         )
-                                      //       : Icon(
-                                      //           Icons.close,
-                                      //           color: Colors.red,
-                                      //         ),
-                                      // ),
-                                      _myBox2.containsKey(
-                                              widget.foundList[index].id)
-                                          ? IconButton(
-                                              onPressed: () {
-                                                context
-                                                    .read<FavoriteBloc>()
-                                                    .add(
-                                                      RemoveFavorite(
-                                                        petId: widget
-                                                            .foundList[index]
-                                                            .id,
-                                                        timestamp:
-                                                            DateTime.now(),
-                                                      ),
-                                                    );
-                                              },
-                                              icon: Icon(Icons.favorite),
-                                            )
-                                          : IconButton(
-                                              onPressed: () {
-                                                context
-                                                    .read<FavoriteBloc>()
-                                                    .add(
-                                                      AddFavorite(
-                                                        petId: widget
-                                                            .foundList[index]
-                                                            .id,
-                                                        timestamp:
-                                                            DateTime.now(),
-                                                      ),
-                                                    );
-                                              },
-                                              icon: Icon(
-                                                Icons.favorite_border_outlined,
-                                              ),
+                                    ),
+                                    Spacer(),
+                                    // SizedBox(
+                                    //   child: !_myBox
+                                    //           .containsKey(widget.foundList[index].id)
+                                    //       ? Icon(
+                                    //           Icons.check,
+                                    //           color: Colors.green,
+                                    //         )
+                                    //       : Icon(
+                                    //           Icons.close,
+                                    //           color: Colors.red,
+                                    //         ),
+                                    // ),
+                                    _myBox2.containsKey(
+                                            widget.foundList[index].id)
+                                        ? IconButton(
+                                            onPressed: () {
+                                              context.read<FavoriteBloc>().add(
+                                                    RemoveFavorite(
+                                                      petId: widget
+                                                          .foundList[index].id,
+                                                      timestamp: DateTime.now(),
+                                                    ),
+                                                  );
+                                            },
+                                            icon: Icon(Icons.favorite),
+                                          )
+                                        : IconButton(
+                                            onPressed: () {
+                                              context.read<FavoriteBloc>().add(
+                                                    AddFavorite(
+                                                      petId: widget
+                                                          .foundList[index].id,
+                                                      timestamp: DateTime.now(),
+                                                    ),
+                                                  );
+                                            },
+                                            icon: Icon(
+                                              Icons.favorite_border_outlined,
                                             ),
-                                    ],
-                                  ),
+                                          ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            Visibility(
-                              visible:
-                                  _myBox.get(widget.foundList[index].id) == null
-                                      ? false
-                                      : true,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Already Adopted',
-                                    style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
-                                      fontSize: 18,
-                                      fontFamily: 'Arcon',
-                                    ),
+                              ),
+                            ],
+                          ),
+                          Visibility(
+                            visible:
+                                _myBox.get(widget.foundList[index].id) == null
+                                    ? false
+                                    : true,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Already Adopted',
+                                  style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    color:
+                                        Theme.of(context).colorScheme.surface,
+                                    fontSize: 18,
+                                    fontFamily: 'Arcon',
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             );
           },
         );

@@ -11,7 +11,6 @@ class AdoptionRequested extends AdoptedEvent {
     _myBox.put(petId, DateTime.now());
   }
 
-
   AdoptionRequested({required this.petId});
 }
 
@@ -30,3 +29,5 @@ class AdoptionFailed extends AdoptedEvent {
 class AdoptionLoading extends AdoptedEvent {}
 
 class AdoptionExit extends AdoptedEvent {}
+
+class AdoptionCleared extends AdoptedEvent {}

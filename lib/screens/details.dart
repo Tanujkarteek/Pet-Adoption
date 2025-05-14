@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:quickalert/quickalert.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../bloc/adopted/adopted_bloc.dart';
 import '../widgets/herophotoview.dart';
 import 'homescreen.dart';
@@ -595,7 +595,7 @@ class _PetDetailState extends State<PetDetail> {
                                               Text(
                                                 dataList[index].name,
                                                 style: TextStyle(
-                                                  fontSize: 40,
+                                                  fontSize: kIsWeb ? 54 : 40,
                                                   fontFamily: "WatchQuinn",
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -606,7 +606,7 @@ class _PetDetailState extends State<PetDetail> {
                                               Text(
                                                 "\$ ${dataList[index].price}",
                                                 style: TextStyle(
-                                                  fontSize: 24,
+                                                  fontSize: kIsWeb ? 48 : 24,
                                                   fontFamily: "WatchQuinn",
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -720,10 +720,15 @@ class _PetDetailState extends State<PetDetail> {
                                                         .size
                                                         .width *
                                                     0.2,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.12,
+                                                height: !kIsWeb
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.12
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.08,
                                                 child: Text(
                                                   "${dataList[index].age} Months\nAge",
                                                   style: TextStyle(
@@ -760,10 +765,15 @@ class _PetDetailState extends State<PetDetail> {
                                                         .size
                                                         .width *
                                                     0.2,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.12,
+                                                height: !kIsWeb
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.12
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.08,
                                                 child: Text(
                                                   "${dataList[index].gender} \nGender",
                                                   style: TextStyle(
@@ -798,7 +808,7 @@ class _PetDetailState extends State<PetDetail> {
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .primary,
-                                              fontSize: 18,
+                                              fontSize: kIsWeb ? 42 : 18,
                                               fontFamily: "AlbertSans",
                                             ),
                                           ),
@@ -814,10 +824,15 @@ class _PetDetailState extends State<PetDetail> {
                                                   .size
                                                   .width *
                                               0.46,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.12,
+                                          height: !kIsWeb
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.12
+                                              : MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.08,
                                           child: ElevatedButton(
                                             onPressed: _myBox.containsKey(
                                                     dataList[index].id)
@@ -841,7 +856,7 @@ class _PetDetailState extends State<PetDetail> {
                                             child: Text(
                                               "Adopt",
                                               style: TextStyle(
-                                                fontSize: 20,
+                                                fontSize: kIsWeb ? 46 : 20,
                                                 fontFamily: "WatchQuinn",
                                                 color: Theme.of(context)
                                                     .colorScheme

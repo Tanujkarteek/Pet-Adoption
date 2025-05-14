@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../constants/data.dart';
 
@@ -227,9 +228,11 @@ class FilterPageState extends State<FilterPage> {
                 SizedBox(height: 20),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.4,
-                  height: isLandscape
-                      ? MediaQuery.of(context).size.height * 0.08
-                      : MediaQuery.of(context).size.height * 0.05,
+                  height: kIsWeb
+                      ? MediaQuery.of(context).size.height * 0.05
+                      : isLandscape
+                          ? MediaQuery.of(context).size.height * 0.08
+                          : MediaQuery.of(context).size.height * 0.05,
                   child: ElevatedButton(
                     onPressed: _runFilter,
                     style: ElevatedButton.styleFrom(

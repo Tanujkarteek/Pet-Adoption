@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:adoption/bloc/adopted/adopted_bloc.dart';
 import 'package:adoption/repository/pet_repository.dart';
 import 'package:adoption/repository/pet_repository_interface.dart';
@@ -8,8 +7,7 @@ import 'package:adoption/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../constants/categorybar.dart';
 import '../constants/data.dart';
@@ -166,11 +164,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       horizontal: MediaQuery.of(context).size.width * 0.05,
                     ),
                     child: Container(
-                      height: !isLandscape
-                          ? isIos
-                              ? MediaQuery.of(context).size.height * 0.06
-                              : MediaQuery.of(context).size.height * 0.05
-                          : MediaQuery.of(context).size.height * 0.1,
+                      height: kIsWeb
+                          ? MediaQuery.of(context).size.height * 0.04
+                          : !isLandscape
+                              ? isIos
+                                  ? MediaQuery.of(context).size.height * 0.06
+                                  : MediaQuery.of(context).size.height * 0.05
+                              : MediaQuery.of(context).size.height * 0.1,
                       decoration: BoxDecoration(
                         color: Theme.of(context)
                             .colorScheme
@@ -300,9 +300,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         //horizontal navigation bar using listview builder
                         SizedBox(
-                          height: !isLandscape
+                          height: kIsWeb
                               ? MediaQuery.of(context).size.height * 0.05
-                              : MediaQuery.of(context).size.height * 0.1,
+                              : !isLandscape
+                                  ? MediaQuery.of(context).size.height * 0.05
+                                  : MediaQuery.of(context).size.height * 0.1,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: categoryList.length,
@@ -318,16 +320,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                       right: MediaQuery.of(context).size.width *
                                           0.03),
                                   child: Container(
-                                    height: !isLandscape
+                                    height: kIsWeb
                                         ? MediaQuery.of(context).size.height *
                                             0.05
-                                        : MediaQuery.of(context).size.height *
-                                            0.08,
-                                    width: !isLandscape
+                                        : !isLandscape
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.05
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.08,
+                                    width: kIsWeb
                                         ? MediaQuery.of(context).size.width *
-                                            0.3
-                                        : MediaQuery.of(context).size.width *
-                                            0.15,
+                                            0.15
+                                        : !isLandscape
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.3
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.15,
                                     decoration: BoxDecoration(
                                       color: isSelected
                                           ? Theme.of(context)

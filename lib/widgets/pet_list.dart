@@ -61,18 +61,16 @@ class _PetListState extends State<PetList> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: !isLandscape
-                    ? kIsWeb
-                        ? 4
-                        : 2
-                    : 3,
-                childAspectRatio: !isLandscape
-                    ? kIsWeb
-                        ? 1.8
-                        : isIos
-                            ? 0.88
-                            : 0.75
-                    : 1.34,
+                crossAxisCount: kIsWeb
+                    ? 4
+                    : !isLandscape
+                        ? 2
+                        : 3,
+                childAspectRatio: kIsWeb
+                    ? 1.8
+                    : !isLandscape
+                        ? 0.88
+                        : 0.75,
               ),
               itemCount: widget.foundList.length,
               itemBuilder: (context, index) {
